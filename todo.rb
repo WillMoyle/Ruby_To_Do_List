@@ -7,7 +7,7 @@
 module Menu
     
     def menu
-        "What task do you wish to perform?\n\t1. Add a new task\n\t2. Show all current tasks\n\t3. Write to a file\n\t4. Read from a file\n\tQ. Quit the program"
+        "What task do you wish to perform?\n\t1. Add a new task\n\t2. Show all current tasks\n\t3. Write to a file\n\t4. Read from a file\n\t5. Delete a task\n\t6. Update a task\n\tQ. Quit the program"
     end
     
     def show
@@ -49,7 +49,11 @@ class List
 
     # show all tasks
     def show
-        all_tasks.each {|task| puts task.description}
+        current = 1
+        all_tasks.each  do |task|
+            puts current.to_s + ") " + task.description
+            current += 1
+        end
     end
 
     # read a task from a file
@@ -74,9 +78,21 @@ class List
     end
 
     # delete a task
+    def delete
+        show
+        to_delete = prompt("Enter task number.")
+        all_tasks.delete_at(to_delete.to_i - 1)
+    end
+        
 
     # update a task
-
+    def update
+        show
+        to_update = prompt("Enter task number.")
+        new_description = prompt("Enter a new description.")
+        all_tasks[to_update.to_i - 1].update(new_description)
+    end
+    
 end
 
 
@@ -88,6 +104,10 @@ class Task
 
     def initialize(description)
         @description = description
+    end
+    
+    def update(new_description)
+        @description = new_description
     end
 
 end
@@ -106,6 +126,8 @@ while continue
         when "2" then my_list.show
         when "3" then my_list.write_to_file
         when "4" then my_list.read_from_file
+        when "5" then my_list.delete
+        when "6" then my_list.update
         when "Q" then continue = false
         
         else puts "Invalid input"
